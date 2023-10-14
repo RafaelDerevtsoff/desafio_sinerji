@@ -10,6 +10,11 @@ public class Secretary extends Employee implements Salary, Benefits {
         super(name, hiringDate);
     }
 
+    @Override
+    public boolean hasBenefits() {
+        return true;
+    }
+
     public Long getBaseSalary() {
         return baseSalary;
     }
@@ -19,18 +24,18 @@ public class Secretary extends Employee implements Salary, Benefits {
     }
 
     @Override
-    public Double calculateBenefits() {
+    public Double calculateBenefits(Integer year,Integer month) {
         return baseSalary * 0.02;
     }
 
     @Override
-    public Long calculateSalary(Integer time) {
-        return baseSalary + (getAdditionalPerYear() * time) ;
+    public Double calculateSalary(Integer time) {
+        return (double) (baseSalary + (getAdditionalPerYear() * time));
     }
 
     @Override
     public Double calculateTotal(Integer year,Integer month) {
         int between = (int) ChronoUnit.YEARS.between(this.getHiringDate(), LocalDate.of(year, month, 1));
-        return this.calculateSalary(between) + this.calculateBenefits();
+        return this.calculateSalary(between) + this.calculateBenefits(year, month);
     }
 }

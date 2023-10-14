@@ -6,6 +6,11 @@ public class Employee implements Salary {
     private String name;
     private LocalDate hiringDate;
 
+    @Override
+    public boolean hasBenefits() {
+        return false;
+    }
+
     public String getName() {
         return name;
     }
@@ -28,8 +33,8 @@ public class Employee implements Salary {
     }
 
     @Override
-    public Long calculateSalary(Integer time) {
-        return 0L;
+    public Double calculateSalary(Integer time) {
+        return 0.0;
     }
 
     @Override

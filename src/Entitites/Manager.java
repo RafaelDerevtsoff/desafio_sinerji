@@ -19,8 +19,8 @@ public class Manager extends Employee implements Salary {
     }
 
     @Override
-    public Long calculateSalary(Integer time) {
-        return baseSalary + (getAdditionalPerYear() * time);
+    public Double calculateSalary(Integer time) {
+        return (double) (baseSalary + (getAdditionalPerYear() * time));
     }
 
     @Override

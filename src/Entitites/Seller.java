@@ -2,12 +2,20 @@ package Entitites;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
-public class Seller extends Employee implements Salary, Benefits {
-    private final Long baseSalary =  12000L;
+public class Seller extends Employee implements Sales, Benefits {
+    private final Long baseSalary = 12000L;
 
-    public Seller(String name, LocalDate hiringDate) {
+
+    private List<Sale> sales;
+    public List<Sale> getSales() {
+        return sales;
+    }
+
+    public Seller(String name, LocalDate hiringDate, List<Sale> sales) {
         super(name, hiringDate);
+        this.sales = sales;
     }
 
     public Long getBaseSalary() {
@@ -17,20 +25,36 @@ public class Seller extends Employee implements Salary, Benefits {
     public Long getAdditionalPerYear() {
         return 1800L;
     }
-
     @Override
-    public Double calculateBenefits() {
-        return baseSalary * 0.03;
+    public Double calculateSalary(Integer time) {
+        return (double) (baseSalary + (getAdditionalPerYear() * time));
     }
 
     @Override
-    public Long calculateSalary(Integer time) {
-        return baseSalary + (getAdditionalPerYear() * time);
+    public boolean hasBenefits() {
+        return true;
     }
 
     @Override
     public Double calculateTotal(Integer year, Integer month) {
         int between = (int) ChronoUnit.YEARS.between(this.getHiringDate(), LocalDate.of(year, month, 1));
-        return this.calculateSalary(between) + this.calculateBenefits();
+        return this.calculateSalary(between) + this.calculateCommission(month, year);
+    }
+
+    @Override
+    public Double calculateCommission(Integer month, Integer year) {
+        return sales
+                .stream()
+                .filter(sale -> sale.getDate().equals(LocalDate.of(year, month, 1)))
+                .findFirst()
+                .get().getValor() * 0.03;
+    }
+    @Override
+    public Double calculateBenefits(Integer year,Integer month) {
+        return sales
+                .stream()
+                .filter(sale -> sale.getDate().equals(LocalDate.of(year, month, 1)))
+                .findFirst()
+                .get().getValor() * 0.03;
     }
 }
